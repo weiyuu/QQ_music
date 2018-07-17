@@ -25,7 +25,22 @@
                 // 非同一首歌
                 this.$audio.attr('src',music.link_url);
                 this.audio.play();
+                this.currentIndex = index;
             }
+        },
+        preIndex:function () {
+            var index = this.currentIndex-1;
+            if(index <0) {
+                index = this.musicList.length-1;
+            }
+            return index;
+        },
+        nextIndex:function () {
+            var index = this.currentIndex +1;
+            if(index > this.musicList.length -1) {
+                index = 0;
+            }
+            return index;
         }
     };
 
