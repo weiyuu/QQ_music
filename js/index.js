@@ -26,7 +26,8 @@ $(function () {
                 $.each(data,function (index,ele) {
                     var $item = createMusicITem(index,ele);
                     $musicList.append($item);
-                })
+                });
+                initMusicInfo(data[0]);
             },
             error:function (e) {
                 console.log(e);
@@ -92,19 +93,23 @@ $(function () {
             // 4.5 播放音乐
             player.playMusic(lMusic.get(0).index,lMusic.get(0).music);
 
+            // 4.6 切换歌曲信息
+            initMusicInfo(lMusic.get(0).music);
         });
+
         // 监听底部控制区域播放按钮事件
+        // 5. 监听底部播放按钮事件
         dPlay.click(function () {
             //判断之前有未播放过
             if(player.currentIndex == -1) {
-                //播放过
+                //未播放过
                 $('.list_music').eq(0).find('.list_menu_play').trigger('click');
             }else {
-                // 未播放过
+                // 播放过
                 $('.list_music').eq(player.currentIndex).find('.list_menu_play').trigger('click');
             }
         });
-        // 监听底部上一首按钮事件
+        //6. 监听底部上一首按钮事件
 
 
         mPre.click(function () {
@@ -112,13 +117,63 @@ $(function () {
         });
 
 
-        // 监听底部下一首按钮事件
+        // 7.监听底部下一首按钮事件
         mNext.click(function () {
             $('.list_music').eq(player.nextIndex()).find('.list_menu_play').trigger('click');
         });
+
+        // 8. 监听删除按钮事件
+        $('.content_list').delegate('.list_music_del','click',function () {
+            // 找到被点击的音乐
+            var $item = $(this).parents('.list_music');
+
+            // 判断当前删除的是否是正在播放的音乐
+            // 若是则播放下一首
+            if($item.get(0).index === player.currentIndex) {
+                mNext.trigger('click');
+            }
+
+
+            $item.remove();
+            player.changeMusic($item.get(0).index);
+
+            // 重新排序
+            $('.list_music').each(function (index, ele) {
+                ele.index = index;
+                $(ele).find('.list_number').text(index+1);
+            })
+
+        })
+
     }
 
 
+    // 初始化歌曲信息
+    function initMusicInfo(music) {
+        //歌曲图片
+        const musicImg = $('.song_info_pic img');
+        // 歌曲名
+        const musicName = $('.song_info_name a');
+        // 歌手
+        const singer = $('.song_info_singer a');
+        // 专辑
+        const album = $('.song_info_album a');
+        // 进度条歌曲名
+        const dName = $('.music_progress_name');
+        //进度条时间
+        const dTime =$('.music_progress_time');
+        // 背景
+        const bg = $('.mask_bg');
+
+        // 给获取到的元素赋值
+        musicImg.attr('src',music.cover);
+        musicName.text(music.name);
+        singer.text(music.singer);
+        album.text(music.album);
+        dName.text(music.name+" / "+music.singer);
+        dTime.text('00:00 /'+music.time);
+        bg.css('background','url('+music.cover+')')
+    }
 
 
 
@@ -139,7 +194,7 @@ $(function () {
                             '<div class="list_singer">'+music.singer+'</div>\n' +
                             '<div class="list_time">\n' +
                                 '<span>'+music.time+'</span>\n' +
-                                '<a href="javascript:;" title="删除"></a>\n' +
+                                '<a href="javascript:;" title="删除" class="list_music_del"></a>\n' +
                             '</div>\n' +
                        '</li>');
         $item.get(0).index = index;
