@@ -8,6 +8,15 @@ $(function () {
     var mPre = $('.music_pre');
     //底部下一首按钮
     var mNext = $('.music_next');
+    // 底部进度条
+    const bar = $('.music_progress_bar');
+    //底部进度条前景色
+    const line = $('.music_progress_line');
+    // 底部进度条小圆点
+    const dot = $('.music_progress_dot');
+
+    var progress = Progress(bar,line,dot);
+    progress.progressClick();
 
 
     var $audio = $('audio');
