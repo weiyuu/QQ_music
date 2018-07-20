@@ -13,15 +13,24 @@
             // 监听背景点击
             var $this = this;
 
-            this.bar.click(function (event) {
-                    // 获取背景距离窗口默认的位置
-                    //默认距离左窗口的距离
-                    var normalLeft = $(this).offset().left;
-                    // 获取点击的位置距离窗口的位置
-                    var eventLeft = event.pageX;
-                    // 设置前景的宽度
-                    $this.line.css('width',eventLeft-normalLeft);
-                    $this.dot.css('left',eventLeft-normalLeft)
+            // this.bar.click(function (event) {
+            //         // 获取背景距离窗口默认的位置
+            //         //默认距离左窗口的距离
+            //         var normalLeft = $(this).offset().left;
+            //         // 获取点击的位置距离窗口的位置
+            //         var eventLeft = event.pageX;
+            //         // 设置前景的宽度
+            //         $this.line.css('width',eventLeft-normalLeft);
+            //         $this.dot.css('left',eventLeft-normalLeft)
+            // });
+            this.bar.click(event => {
+                // 获取背景距离窗口默认的位置
+                //默认距离左窗口的距离
+                let normalLeft = this.bar.offset().left;
+                // 获取点击的位置距离窗口的位置
+                let eventLeft = event.pageX;
+                this.line.css('width',eventLeft - normalLeft);
+                this.dot.css('left',eventLeft-normalLeft);
             });
 
 
