@@ -51,14 +51,6 @@
                 this.currentIndex -= 1;
             }
         },
-        // 总时长
-        getMusicDuration:function () {
-            return this.audio.duration;
-        },
-        // 播放时长
-        getCurrentTime:function () {
-          return this.audio.currentTime;
-        },
         musicTimeUpdata:function (callback) {
             this.$audio.on('timeupdate',()=> {
                 var currentTime = this.audio.currentTime;
@@ -79,6 +71,9 @@
                 }
                 return min+':'+sec;
             }
+        },
+        musicSeekTo:function (value) {
+            this.audio.currentTime = this.audio.duration*value;
         }
     };
 

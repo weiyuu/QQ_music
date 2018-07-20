@@ -9,38 +9,33 @@
             this.line = line;
             this.dot = dot;
         },
-        progressClick:function () {
-            /*// 监听背景点击
-            var $this = this;
-            this.bar.click(function (event) {
-                    // 获取背景距离窗口默认的位置
-                    //默认距离左窗口的距离
-                    var normalLeft = $(this).offset().left;
-                    // 获取点击的位置距离窗口的位置
-                    var eventLeft = event.pageX;
-                    // 设置前景的宽度
-                    $this.line.css('width',eventLeft-normalLeft);
-                    $this.dot.css('left',eventLeft-normalLeft)
-            });*/
+        isMove:false,
+        progressClick:function (callBack) {
 
             this.bar.click(event => {
                 // 获取背景距离窗口默认的位置
                 //默认距离左窗口的距离
-                let normalLeft = this.bar.offset().left;
+                var normalLeft = this.bar.offset().left;
                 // 获取点击的位置距离窗口的位置
-                let eventLeft = event.pageX;
+                var eventLeft = event.pageX;
                 this.line.css('width',eventLeft - normalLeft);
                 this.dot.css('left',eventLeft-normalLeft);
+
+                // 进度条比例
+                var value = (eventLeft-normalLeft)/this.bar.width();
+                callBack(value);
+
             });
         },
-        progressMove:function () {
+        progressMove:function (callBack) {
             // 获取背景距离窗口默认的位置
             //默认距离左窗口的距离
             var normalLeft = this.bar.offset().left;
-
+            var eventLeft;
             this.bar.mousedown(event=> {
                 $(document).mousemove(event=> {
-                    var eventLeft = event.pageX;
+                    this.isMove = true;
+                    eventLeft = event.pageX;
                     //处理进度条超出的问题
                     if(eventLeft < normalLeft) {
                         this.line.css('width',0);
@@ -52,6 +47,7 @@
                         this.line.css('width',eventLeft - normalLeft);
                          this.dot.css('left',eventLeft - normalLeft);
                     }
+
                 })
             });
 
@@ -61,12 +57,17 @@
 
 
             // 监听鼠标抬起事件
-            $(document).mouseup(function () {
+            $(document).mouseup(()=> {
                 $(document).off('mousemove');
+                this.isMove = false;
+                // 进度条比例
+                var value = (eventLeft-normalLeft)/this.bar.width();
+                callBack(value);
             })
 
         },
         setprogress:function (value) {
+            if(this.isMove)return;
             var dotLeft = $('.music_progress_line').width() - 6;
             if(value < 0 || value >100) {
                 return;

@@ -16,8 +16,12 @@ $(function () {
     const dot = $('.music_progress_dot');
 
     var progress = Progress(bar,line,dot);
-    progress.progressClick();
-    progress.progressMove();
+    progress.progressClick(function (value) {
+        player.musicSeekTo(value);
+    });
+    progress.progressMove(function (value) {
+        player.musicSeekTo(value);
+    });
 
 
 
@@ -49,8 +53,6 @@ $(function () {
     // 1. 初始化事件监听
     initEvents();
     function initEvents() {
-
-
         //1 初始化自定义滚动条
         cList.mCustomScrollbar();
 
@@ -121,13 +123,9 @@ $(function () {
             }
         });
         //6. 监听底部上一首按钮事件
-
-
         mPre.click(function () {
             $('.list_music').eq(player.preIndex()).find('.list_menu_play').trigger('click');
         });
-
-
         // 7.监听底部下一首按钮事件
         mNext.click(function () {
             $('.list_music').eq(player.nextIndex()).find('.list_menu_play').trigger('click');
@@ -160,19 +158,19 @@ $(function () {
             var value = cur / dur * 100;
             progress.setprogress(value);
             if(value == 100) {
-                mNext.trigger('click');
+                setTimeout(()=> {
+                    mNext.trigger('click');
+                },100)
             }
         });
 
 
 
+        }
 
 
-    }
-
-
-// 初始化歌曲信息
-function initMusicInfo(music) {
+    // 初始化歌曲信息
+    function initMusicInfo(music) {
         //歌曲图片
         const musicImg = $('.song_info_pic img');
         // 歌曲名
@@ -195,49 +193,56 @@ function initMusicInfo(music) {
         album.text(music.album);
         dName.text(music.name+" / "+music.singer);
         dTime.text(music.time);
-        bg.css('background','url('+music.cover+')')
+        bg.css('background','url('+music.cover+')');
+
     }
 
 
 
 
     // 定义创建音乐的方法
-function createMusicITem(index,music) {
-        var $item = $('<li class="list_music">\n' +
-                            '<div class="list_check"> <i></i></div>\n' +
-                            '<div class="list_number">'+(index+1)+'</div>\n' +
-                            '<div class="list_name">'+music.name+'\n' +
-                                '<div class="list_menu">\n' +
-                                    '<a href="javascript:;" title="播放" class="list_menu_play"></a>\n' +
-                                    '<a href="javascript:;" title="添加"></a>\n' +
-                                    '<a href="javascript:;" title="下载"></a>\n' +
-                                    '<a href="javascript:;" title="分享"></a>\n' +
+    function createMusicITem(index,music) {
+            var $item = $('<li class="list_music">\n' +
+                                '<div class="list_check"> <i></i></div>\n' +
+                                '<div class="list_number">'+(index+1)+'</div>\n' +
+                                '<div class="list_name">'+music.name+'\n' +
+                                    '<div class="list_menu">\n' +
+                                        '<a href="javascript:;" title="播放" class="list_menu_play"></a>\n' +
+                                        '<a href="javascript:;" title="添加"></a>\n' +
+                                        '<a href="javascript:;" title="下载"></a>\n' +
+                                        '<a href="javascript:;" title="分享"></a>\n' +
+                                    '</div>\n' +
                                 '</div>\n' +
-                            '</div>\n' +
-                            '<div class="list_singer">'+music.singer+'</div>\n' +
-                            '<div class="list_time">\n' +
-                                '<span>'+music.time+'</span>\n' +
-                                '<a href="javascript:;" title="删除" class="list_music_del"></a>\n' +
-                            '</div>\n' +
-                       '</li>');
-        $item.get(0).index = index;
-        $item.get(0).music = music;
-        return $item;
+                                '<div class="list_singer">'+music.singer+'</div>\n' +
+                                '<div class="list_time">\n' +
+                                    '<span>'+music.time+'</span>\n' +
+                                    '<a href="javascript:;" title="删除" class="list_music_del"></a>\n' +
+                                '</div>\n' +
+                           '</li>');
+            $item.get(0).index = index;
+            $item.get(0).music = music;
+            return $item;
+        }
+
+
+    // 定义一个格式化时间的方法
+    function format(time) {
+        var min = parseInt(time/60);
+        var sec = parseInt(time%60);
+        if(min < 10) {
+            min = '0'+min;
+        }
+        if(sec < 10) {
+            sec = '0'+sec;
+        }
+        return min+':'+sec;
     }
+
+
+
+
 });
 
-// 定义一个格式化时间的方法
-function format(time) {
-    var min = parseInt(time/60);
-    var sec = parseInt(time%60);
-    if(min < 10) {
-        min = '0'+min;
-    }
-    if(sec < 10) {
-        sec = '0'+sec;
-    }
-    return min+':'+sec;
-}
 
 
 
