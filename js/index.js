@@ -17,6 +17,8 @@ $(function () {
 
     var progress = Progress(bar,line,dot);
     progress.progressClick();
+    progress.progressMove();
+
 
 
     var $audio = $('audio');
@@ -151,14 +153,26 @@ $(function () {
                 ele.index = index;
                 $(ele).find('.list_number').text(index+1);
             })
+        });
+        player.musicTimeUpdata(function (curtime,durTime,cur,dur) {
+            $('.music_progress_time_cur').text(curtime);
+            // 进度条
+            var value = cur / dur * 100;
+            progress.setprogress(value);
+            if(value == 100) {
+                mNext.trigger('click');
+            }
+        });
 
-        })
+
+
+
 
     }
 
 
-    // 初始化歌曲信息
-    function initMusicInfo(music) {
+// 初始化歌曲信息
+function initMusicInfo(music) {
         //歌曲图片
         const musicImg = $('.song_info_pic img');
         // 歌曲名
@@ -170,7 +184,7 @@ $(function () {
         // 进度条歌曲名
         const dName = $('.music_progress_name');
         //进度条时间
-        const dTime =$('.music_progress_time');
+        const dTime =$('.music_progress_time_dur');
         // 背景
         const bg = $('.mask_bg');
 
@@ -180,7 +194,7 @@ $(function () {
         singer.text(music.singer);
         album.text(music.album);
         dName.text(music.name+" / "+music.singer);
-        dTime.text('00:00 /'+music.time);
+        dTime.text(music.time);
         bg.css('background','url('+music.cover+')')
     }
 
@@ -188,7 +202,7 @@ $(function () {
 
 
     // 定义创建音乐的方法
-    function createMusicITem(index,music) {
+function createMusicITem(index,music) {
         var $item = $('<li class="list_music">\n' +
                             '<div class="list_check"> <i></i></div>\n' +
                             '<div class="list_number">'+(index+1)+'</div>\n' +
@@ -212,8 +226,18 @@ $(function () {
     }
 });
 
-
-
+// 定义一个格式化时间的方法
+function format(time) {
+    var min = parseInt(time/60);
+    var sec = parseInt(time%60);
+    if(min < 10) {
+        min = '0'+min;
+    }
+    if(sec < 10) {
+        sec = '0'+sec;
+    }
+    return min+':'+sec;
+}
 
 
 

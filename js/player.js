@@ -51,7 +51,35 @@
                 this.currentIndex -= 1;
             }
         },
-
+        // 总时长
+        getMusicDuration:function () {
+            return this.audio.duration;
+        },
+        // 播放时长
+        getCurrentTime:function () {
+          return this.audio.currentTime;
+        },
+        musicTimeUpdata:function (callback) {
+            this.$audio.on('timeupdate',()=> {
+                var currentTime = this.audio.currentTime;
+                var durationTime = this.audio.duration;
+                var durTime =format(durationTime);
+                var curtime = format(currentTime);
+                callback(curtime,durTime,currentTime,durationTime)
+            });
+            // 定义一个格式化时间的方法
+            function format(time) {
+                var min = parseInt(time/60);
+                var sec = parseInt(time%60);
+                if(min < 10) {
+                    min = '0'+min;
+                }
+                if(sec < 10) {
+                    sec = '0'+sec;
+                }
+                return min+':'+sec;
+            }
+        }
     };
 
     Player.prototype.init.prototype = Player.prototype;

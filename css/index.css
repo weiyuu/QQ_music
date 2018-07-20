@@ -2,7 +2,11 @@
     margin: 0;
     padding: 0;
 }
-
+html {
+    -moz-user-select: -moz-none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+}
 
 
 /* 
@@ -336,9 +340,10 @@
     height: 4px;
     background: rgba(255,255,255,.5);
     margin-top: 5px;
+    position: relative;
 }
 .music_progress_line {
-    width: 100px;
+    width: 0px;
     height: 100%;
     background: #ffffff;
 }
@@ -347,9 +352,10 @@
     height: 14px;
     border-radius: 50%;
     background: #ffffff;
-    position: relative;
+    position: absolute;
     top: -5px;
-    left: 100px;
+    left: 0px;
+    margin-left: 0;
 }
 /*各种功能键*/
 .footer_in .music_mode {
@@ -428,7 +434,7 @@
     top: 25px;
 }
 .music_voice_line {
-    width: 10px;
+    width: 0px;
     height: 100%;
     background: #ffffff;
 }
@@ -438,7 +444,7 @@
     border-radius: 50%;
     position: relative;
     top: -3px;
-    left: 10px;
+    left: 0px;
     background: #ffffff;
 }
 
