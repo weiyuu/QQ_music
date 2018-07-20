@@ -42,13 +42,13 @@
                 $(document).mousemove(event=> {
                     var eventLeft = event.pageX;
                     //处理进度条超出的问题
-                    if(eventLeft <= normalLeft) {
+                    if(eventLeft < normalLeft) {
                         this.line.css('width',0);
-                        this.dot.css('left',0);
-                    }else if(eventLeft >= (658+normalLeft)) {
+                        this.dot.css('left','-14px');
+                    }else if(eventLeft > (658+normalLeft)) {
                         this.line.css('width',658);
                         this.dot.css('left',658);
-                    }else if(eventLeft > normalLeft || eventLeft < (normalLeft+670)){
+                    }else if(eventLeft > normalLeft || eventLeft < (normalLeft+658)){
                         this.line.css('width',eventLeft - normalLeft);
                          this.dot.css('left',eventLeft - normalLeft);
                     }
@@ -67,14 +67,15 @@
 
         },
         setprogress:function (value) {
+            var dotLeft = $('.music_progress_line').width() - 6;
             if(value < 0 || value >100) {
                 return;
             }else {
                 this.line.css({
-                    width: value+'%'
+                    width: value+'%',
                 });
                 this.dot.css({
-                    left:value+'%'
+                    left:dotLeft
                 })
             }
         },
