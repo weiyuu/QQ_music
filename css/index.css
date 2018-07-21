@@ -248,10 +248,16 @@ html {
     opacity: 1;
 }
 /*歌词*/
+.song_lyric_container {
+    margin-top: 50px;
+    height: 300px;
+    overflow: hidden;
+    line-height: 30px;
+}
 .song_lyric {
-    margin-top: 20px;
     text-align: center;
 }
+
 .song_lyric li {
     list-style: none;
     line-height: 30px;

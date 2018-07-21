@@ -14,6 +14,8 @@ $(function () {
     const line = $('.music_progress_line');
     // 底部进度条小圆点
     const dot = $('.music_progress_dot');
+    // 歌词
+    var lyric;
 
     var progress = Progress(bar,line,dot);
     progress.progressClick(function (value) {
@@ -58,6 +60,7 @@ $(function () {
                     $musicList.append($item);
                 });
                 initMusicInfo(data[0]);
+                initMusicLyric(data[0]);
             },
             error:function (e) {
                 console.log(e);
@@ -123,6 +126,7 @@ $(function () {
 
             // 4.6 切换歌曲信息
             initMusicInfo(lMusic.get(0).music);
+            initMusicLyric(lMusic.get(0).music)
         });
 
         // 监听底部控制区域播放按钮事件
@@ -178,6 +182,14 @@ $(function () {
                     mNext.trigger('click');
                 },100)
             }
+            var index = lyric.currentIndex(cur);
+            var $item = $('.song_lyric li').eq(index);
+            $item.addClass('cur');
+            $item.siblings().removeClass('cur');
+            if(index <=5)return;
+            $('.song_lyric').css({
+                marginTop:((-index+5)*30)
+            });
         });
 
         //音量监听
@@ -229,6 +241,20 @@ $(function () {
         dTime.text(music.time);
         bg.css('background','url('+music.cover+')');
 
+    }
+    //初始化歌词
+    function initMusicLyric(music) {
+        lyric = new Lyric(music.link_lrc);
+        var lyricContainer = $('.song_lyric');
+        //清空上一首音乐的歌词
+        lyricContainer.html('');
+        lyric.loadLyric(function () {
+            //创建歌词列表
+            $.each(lyric.lyric,(index,ele)=> {
+                var $item = $("<li>"+ele+"</li>");
+                lyricContainer.append($item);
+            })
+        });
     }
 
 
