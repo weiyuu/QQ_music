@@ -144,10 +144,16 @@ $(function () {
         //6. 监听底部上一首按钮事件
         mPre.click(function () {
             $('.list_music').eq(player.preIndex()).find('.list_menu_play').trigger('click');
+            var lyricContainer = $('.song_lyric');
+            //清空上一首音乐的歌词
+            lyricContainer.html('');
         });
         // 7.监听底部下一首按钮事件
         mNext.click(function () {
             $('.list_music').eq(player.nextIndex()).find('.list_menu_play').trigger('click');
+            var lyricContainer = $('.song_lyric');
+            //清空上一首音乐的歌词
+            lyricContainer.html('');
         });
 
         // 8. 监听删除按钮事件
@@ -246,8 +252,8 @@ $(function () {
     function initMusicLyric(music) {
         lyric = new Lyric(music.link_lrc);
         var lyricContainer = $('.song_lyric');
-        //清空上一首音乐的歌词
         lyricContainer.html('');
+        //清空上一首音乐的歌词
         lyric.loadLyric(function () {
             //创建歌词列表
             $.each(lyric.lyric,(index,ele)=> {
