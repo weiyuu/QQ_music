@@ -73,8 +73,17 @@
             }
         },
         musicSeekTo:function (value) {
-            this.audio.currentTime = this.audio.duration*value;
-        }
+            if (isNaN(value)){return}
+            this.audio.currentTime = this.audio.duration * value;
+        },
+        musicVoiceSeekTo:function (value) {
+            if (value == NaN){return}
+            if (value >=0 && value <= 1){
+                // 取值范围0~1
+                this.audio.volume = value;
+            }
+        },
+
     };
 
     Player.prototype.init.prototype = Player.prototype;

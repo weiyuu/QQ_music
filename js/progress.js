@@ -47,7 +47,8 @@
                         this.line.css('width',eventLeft - normalLeft);
                          this.dot.css('left',eventLeft - normalLeft);
                     }
-
+                    // var value = (eventLeft-normalLeft)/this.bar.width();
+                    // callBack(value);
                 })
             });
 
@@ -79,6 +80,63 @@
                     left:dotLeft
                 })
             }
+        },
+        vprogressClick:function (callBack) {
+
+            this.bar.click(event => {
+                // 获取背景距离窗口默认的位置
+                //默认距离左窗口的距离
+                var normalLeft = this.bar.offset().left;
+                // 获取点击的位置距离窗口的位置
+                var eventLeft = event.pageX;
+                this.line.css('width',eventLeft - normalLeft);
+                this.dot.css('left',eventLeft-normalLeft);
+
+                // 进度条比例
+                var value = (eventLeft-normalLeft)/this.bar.width();
+                callBack(value);
+
+            });
+        },
+        vprogressMove:function (callBack) {
+            // 获取背景距离窗口默认的位置
+            //默认距离左窗口的距离
+            var normalLeft = this.bar.offset().left;
+            var eventLeft;
+            this.bar.mousedown(event=> {
+                $(document).mousemove(event=> {
+                    this.isMove = true;
+                    eventLeft = event.pageX;
+                    //处理进度条超出的问题
+                    if(eventLeft < normalLeft) {
+                        this.line.css('width',0);
+                        this.dot.css('left','0px');
+                    }else if(eventLeft > (60+normalLeft)) {
+                        this.line.css('width',70);
+                        this.dot.css('left',60);
+                    }else if(eventLeft > normalLeft || eventLeft < (normalLeft+60)){
+                        this.line.css('width',eventLeft - normalLeft);
+                        this.dot.css('left',eventLeft - normalLeft);
+                    }
+                    var value = (eventLeft-normalLeft)/this.bar.width();
+                    callBack(value);
+                })
+            });
+
+
+
+
+
+
+            // 监听鼠标抬起事件
+            $(document).mouseup(()=> {
+                $(document).off('mousemove');
+                this.isMove = false;
+                // 进度条比例
+                var value = (eventLeft-normalLeft)/this.bar.width();
+                callBack(value);
+            })
+
         },
     };
     Progress.prototype.init.prototype = Progress.prototype;

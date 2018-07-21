@@ -24,6 +24,21 @@ $(function () {
     });
 
 
+    //音量进度条
+    const vbar = $('.music_voice_bar');
+    //底部进度条前景色
+    const vline = $('.music_voice_line');
+    // 底部进度条小圆点
+    const vdot = $('.music_voice_dot');
+
+    var vprogress = Progress(vbar,vline,vdot);
+    vprogress.vprogressClick(function (value) {
+        player.musicVoiceSeekTo(value)
+    });
+    vprogress.vprogressMove(function (value) {
+        player.musicVoiceSeekTo(value)
+    });
+
 
     var $audio = $('audio');
     var player = new Player($audio);
@@ -152,6 +167,7 @@ $(function () {
                 $(ele).find('.list_number').text(index+1);
             })
         });
+
         player.musicTimeUpdata(function (curtime,durTime,cur,dur) {
             $('.music_progress_time_cur').text(curtime);
             // 进度条
@@ -164,6 +180,24 @@ $(function () {
             }
         });
 
+        //音量监听
+        $('.music_voice_icon').click(function(){
+            //图标切换
+            $('.music_voice_icon').toggleClass('music_voice_icon2');
+
+
+            if($(this).attr('class').indexOf('music_voice_icon2')!= -1) {
+                // 无声
+                player.musicVoiceSeekTo(0);
+                $('.music_voice_line').css('width','0');
+                $('.music_voice_dot').css('left','0')
+            }else {
+            //    有声
+                player.musicVoiceSeekTo(1);
+                $('.music_voice_dot').css('left','65px');
+                $('.music_voice_line').css('width','70');
+            }
+        });
 
 
         }
